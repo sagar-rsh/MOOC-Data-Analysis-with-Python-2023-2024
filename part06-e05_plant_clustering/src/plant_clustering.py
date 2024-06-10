@@ -1,7 +1,9 @@
 #!/usr/bin/env python3
 
 import scipy
-
+from sklearn.datasets import load_iris
+from sklearn.cluster import KMeans
+from sklearn.metrics import accuracy_score
 
 def find_permutation(n_clusters, real_labels, labels):
     permutation=[]
@@ -13,7 +15,17 @@ def find_permutation(n_clusters, real_labels, labels):
     return permutation
 
 def plant_clustering():
-    return 0.0
+    iris = load_iris()
+    X = iris.data
+    y = iris.target
+
+    model = KMeans(n_clusters=3, random_state=0)
+    model.fit(X)
+
+    permutation = find_permutation(3, y, model.labels_)
+    new_lables = [permutation[label] for label in model.labels_]
+
+    return accuracy_score(y, new_lables)
 
 def main():
     print(plant_clustering())
